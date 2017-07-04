@@ -1,0 +1,32 @@
+.badge {
+    position:relative;
+}
+.badge[data-badge]:after {
+    content:attr(data-badge);
+    position:absolute;
+    top:-8px;
+    right:-8px;
+    font-size:.7em;
+    color:white;
+    width:14px;height:14px;
+    text-align:center;
+    line-height:14px;
+    border-radius:50%;
+    box-shadow:0 0 1px #333;
+}
+
+.badge-blue:after {
+    background: #0082D5;
+}
+
+.badge-green:after {
+    background: #04BE5B;
+}
+
+.badge-violet:after {
+    background: #A93ABA;
+}
+
+.badge-red:after {
+    background: #D2335C;
+}

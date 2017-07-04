@@ -1,0 +1,34 @@
+{
+  "name": "camunda-modeler-property-info-plugin",
+  "version": "0.0.1",
+  "description": "This plugin serves a better overview which properties are set per shape.",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify client/client.js > client/client-bundle.js",
+    "auto-build": "watchify client/client.js -o client/client-bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umb/camunda-modeler-property-info-plugin.git"
+  },
+  "keywords": [
+    "camunda",
+    "modeler",
+    "plugin",
+    "properties"
+  ],
+  "author": "Patrick Boesch",
+  "license": "Apache License 2.0",
+  "bugs": {
+    "url": "https://github.com/umb/camunda-modeler-property-info-plugin/issues"
+  },
+  "homepage": "https://github.com/umb/camunda-modeler-property-info-plugin#readme",
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "camunda-modeler-plugin-helpers": "^1.7.0",
+    "watchify": "^3.9.0"
+  },
+  "dependencies": {
+    "lodash": "^3.0.0"
+  }
+}
