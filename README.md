@@ -15,7 +15,8 @@ On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER
 
 :bulb: Save toggle preferences in modeler<br/>
 :bulb: Add implementation for cmmn<br/>
-:bulb: Show toggle state
+:bulb: Show toggle state<br/>
+:bulb: Add implementation for sequence flows
 
 
 ## Licence
