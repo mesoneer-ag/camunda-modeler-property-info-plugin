@@ -45,7 +45,7 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
         }
     });
 
-    function removeShape(element){
+    function removeShape(element) {
         var elementObject = elementOverlays[element.id];
         for (var overlay in elementObject) {
             overlays.remove(elementObject[overlay]);
@@ -97,7 +97,7 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
             var background = '';
             var location = 'right';
             var sort = 0;
-            var key;
+            var key = '';
 
             switch (extensions[extension].$type) {
                 case 'camunda:ExecutionListener':
@@ -190,13 +190,15 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
                     });
                 }
             } else {
-                badges.push({
-                    badgeKey: key,
-                    badgeSort: sort,
-                    badgeType: type,
-                    badgeBackground: background,
-                    badgeLocation: location
-                });
+                if (key !== '') {
+                    badges.push({
+                        badgeKey: key,
+                        badgeSort: sort,
+                        badgeType: type,
+                        badgeBackground: background,
+                        badgeLocation: location
+                    });
+                }
             }
 
 

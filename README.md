@@ -4,6 +4,8 @@
 
 This plugin serves a better overview which properties are set per shape.
 
+![Plugin-Example](./plugin-example.png)
+
 ## How to install
 
 Put this directory into the plugins directory of the Camunda Modeler and you're ready to go.
