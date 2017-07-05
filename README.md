@@ -1,18 +1,38 @@
-# Camunda Modeler Property Info Plugin
+<h1 align="center">
+  Camunda Modeler Property Info Plugin
+</h1>
 
-[![version](https://img.shields.io/badge/version-v0.0.1--alpha-brightgreen.svg)]()
+<h4 align="center">This plugin serves a better overview which properties are set per shape.</h4>
 
-This plugin serves a better overview which properties are set per shape.
+<p align="center">
+    <img src="https://img.shields.io/badge/version-v0.0.1--alpha-brightgreen.svg"
+         alt="version 0.0.1-alpha">
+  <a href="https://github.com/camunda/camunda-modeler"><img src="https://img.shields.io/badge/modeler-1.8.2-brightgreen.svg"
+         alt="version 0.0.1-alpha"></a>
+</p>
+<br>
 
-![Plugin-Example](./plugin-example.png)
-
-
-### Possible Badges
+<div align="center">
+<img src="./plugin-example.png"
+         alt="plugin example">
+</div>
 
 ## How to install
 
 Adding a plugin is as easy as putting the directory into the directory `{MODELER_LOCATION}/plugins`.
 On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER_NAME}/Library/Application Support/camunda-modeler`. A compressed version is always available in the release section.
+
+## Possible Badges
+
+![I](./docs/badges/I.png) Input<br/>
+![O](./docs/badges/O.png) Output<br/>
+![V](./docs/badges/V.png) Variable
+
+![L](./docs/badges/L.png) Listener<br/>
+![T](./docs/badges/T.png) Task Listener
+
+![E](./docs/badges/E.png) Extension<br/>
+![F](./docs/badges/F.png) Field Injection
 
 ## Issues & ideas
 
