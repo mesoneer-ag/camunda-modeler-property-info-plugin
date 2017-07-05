@@ -1,6 +1,6 @@
 # Camunda Modeler Property Info Plugin
 
-[![version](https://img.shields.io/badge/version-v0.0.1-brightgreen.svg)]()
+[![version](https://img.shields.io/badge/version-v0.0.1--alpha-brightgreen.svg)]()
 
 This plugin serves a better overview which properties are set per shape.
 
