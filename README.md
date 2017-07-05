@@ -8,8 +8,8 @@ This plugin serves a better overview which properties are set per shape.
 
 ## How to install
 
-Put this directory into the plugins directory of the Camunda Modeler and you're ready to go.
-
+Adding a plugin is as easy as putting the directory into the directory `{MODELER_LOCATION}/plugins`.
+On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER_NAME}/Library/Application Support/camunda-modeler`. A compressed version is always available in the release section.
 
 ## Licence
 
