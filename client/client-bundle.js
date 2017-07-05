@@ -20,11 +20,38 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
         });
     });
 
+    eventBus.on('shape.removed', function (event) {
+        var element = event.element;
+
+        _.defer(function () {
+            removeShape(element);
+        });
+    });
+
+    eventBus.on('shape.added', function (event) {
+        var element = event.element;
+        if (element.labelTarget || !element.businessObject.$instanceOf('bpmn:FlowNode')) {
+            return;
+        }
+        _.defer(function () {
+            addStyle(element);
+        });
+    });
+
+
     editorActions.register({
         togglePropertyOverlays: function () {
             toggleOverlays();
         }
     });
+
+    function removeShape(element){
+        var elementObject = elementOverlays[element.id];
+        for (var overlay in elementObject) {
+            overlays.remove(elementObject[overlay]);
+        }
+        delete elementOverlays[element.id];
+    }
 
     function toggleOverlays() {
         if (overlaysVisible) {
