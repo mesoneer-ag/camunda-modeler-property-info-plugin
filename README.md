@@ -5,14 +5,14 @@
 <h4 align="center">This plugin serves a better overview which properties are set per shape.</h4>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/version-0.0.1--alpha-brightgreen.svg"
-         alt="version 0.0.1-alpha">
+    <img src="https://img.shields.io/badge/version-0.0.1-brightgreen.svg"
+         alt="version 0.0.1">
   <a href="https://github.com/camunda/camunda-modeler"><img src="https://img.shields.io/badge/modeler-1.8.2-brightgreen.svg"
-         alt="version 0.0.1-alpha"></a>
+         alt="version 1.8.2"></a>
   <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg"
-         alt="version 0.0.1-alpha"></a>
+         alt="license Apache 2.0"></a>
   <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-UMB-yellow.svg?colorB=FED000"
-         alt="version 0.0.1-alpha"></a>
+         alt="with love from umb"></a>
 </p>
 <br>
 
