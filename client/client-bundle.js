@@ -55,6 +55,7 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
     function toggleOverlays() {
         if (overlaysVisible) {
+            overlaysVisible = false;
             if (elementOverlays !== undefined) {
                 for (var elementCount in elementOverlays) {
                     var elementObject = elementOverlays[elementCount];
@@ -63,8 +64,8 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
                     }
                 }
             }
-            overlaysVisible = false;
         } else {
+            overlaysVisible = true;
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var elementObject = elements[elementCount];
@@ -72,13 +73,16 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
                     addStyle(elementObject);
                 }
             }
-            overlaysVisible = true;
         }
     }
 
     function addStyle(element) {
 
         if (element.businessObject.extensionElements === undefined) {
+            return;
+        }
+
+        if(!overlaysVisible){
             return;
         }
 
