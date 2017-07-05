@@ -9,6 +9,10 @@
          alt="version 0.0.1-alpha">
   <a href="https://github.com/camunda/camunda-modeler"><img src="https://img.shields.io/badge/modeler-1.8.2-brightgreen.svg"
          alt="version 0.0.1-alpha"></a>
+  <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg"
+         alt="version 0.0.1-alpha"></a>
+  <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-UMB-yellow.svg?colorB=FED000"
+         alt="version 0.0.1-alpha"></a>
 </p>
 <br>
 
