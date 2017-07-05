@@ -115,7 +115,7 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
                 case 'camunda:Properties':
                     key = 'camunda:Properties';
                     sort = 80;
-                    type = 'P';
+                    type = 'E';
                     background = 'badge-violet';
                     break;
                 case 'camunda:TaskListener':
@@ -132,6 +132,20 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
                     background = 'badge-green';
                     break;
                 case 'camunda:InputOutput':
+                    background = 'badge-blue';
+                    break;
+                case 'camunda:In':
+                    type = 'V';
+                    key = 'camunda:In';
+                    location = 'left';
+                    sort = 10;
+                    background = 'badge-blue';
+                    break;
+                case 'camunda:Out':
+                    type = 'V';
+                    key = 'camunda:Out';
+                    location = 'right';
+                    sort = 60;
                     background = 'badge-blue';
                     break;
                 case 'camunda:Field':
