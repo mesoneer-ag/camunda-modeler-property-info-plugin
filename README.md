@@ -6,6 +6,19 @@ This plugin serves a better overview which properties are set per shape.
 
 ![Plugin-Example](./plugin-example.png)
 
+
+### Possible Badges
+
+| Key | Description |
+| ------------- |-------------|
+| L | Listener |
+| T | Task Listener |
+| I | Input |
+| O | Output |
+| E | Extension |
+| F | Field Injection |
+| V | Variable |
+
 ## How to install
 
 Adding a plugin is as easy as putting the directory into the directory `{MODELER_LOCATION}/plugins`.
