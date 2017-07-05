@@ -8,14 +8,8 @@ var overlaysVisible = true;
 function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
     eventBus.on('shape.changed', function (event) {
-        var element = event.element;
-
-        if (element.labelTarget || !element.businessObject.$instanceOf('bpmn:FlowNode')) {
-            return;
-        }
-
         _.defer(function () {
-            addStyle(element);
+            changeShape(event);
         });
     });
 
@@ -28,12 +22,8 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
     });
 
     eventBus.on('shape.added', function (event) {
-        var element = event.element;
-        if (element.labelTarget || !element.businessObject.$instanceOf('bpmn:FlowNode')) {
-            return;
-        }
         _.defer(function () {
-            addStyle(element);
+            changeShape(event);
         });
     });
 
@@ -43,6 +33,16 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
             toggleOverlays();
         }
     });
+
+    function changeShape(event) {
+        var element = event.element;
+        if (element.labelTarget || !element.businessObject.$instanceOf('bpmn:FlowNode')) {
+            return;
+        }
+        _.defer(function () {
+            addStyle(element);
+        });
+    }
 
     function removeShape(element) {
         var elementObject = elementOverlays[element.id];
@@ -81,7 +81,7 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
             return;
         }
 
-        if(!overlaysVisible){
+        if (!overlaysVisible) {
             return;
         }
 
