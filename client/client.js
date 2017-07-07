@@ -1,4 +1,4 @@
 var registerBpmnJSPlugin = require('camunda-modeler-plugin-helpers').registerBpmnJSPlugin;
-var plugin = require('./ClientPlugin');
+var plugin = require('./PropertyInfoPlugin');
 
 registerBpmnJSPlugin(plugin);

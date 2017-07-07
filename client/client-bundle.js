@@ -6,7 +6,7 @@ var _ = require('lodash');
 var elementOverlays = [];
 var overlaysVisible = true;
 
-function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
+function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
     eventBus.on('shape.changed', function (event) {
         _.defer(function () {
@@ -78,6 +78,12 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
     function addStyle(element) {
 
+        if (elementOverlays[element.id] !== undefined && elementOverlays[element.id].length !== 0) {
+            for (var overlay in elementOverlays[element.id]) {
+                overlays.remove(elementOverlays[element.id][overlay]);
+            }
+        }
+
         if (element.businessObject.extensionElements === undefined) {
             return;
         }
@@ -89,12 +95,6 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
         var extensions = element.businessObject.extensionElements.values;
 
         var badges = [];
-
-        if (elementOverlays[element.id] !== undefined && elementOverlays[element.id].length !== 0) {
-            for (var overlay in elementOverlays[element.id]) {
-                overlays.remove(elementOverlays[element.id][overlay]);
-            }
-        }
 
         for (var extension in extensions) {
             var type = '';
@@ -262,23 +262,22 @@ function ClientPlugin(eventBus, overlays, elementRegistry, editorActions) {
         })
     }
 
-
 }
 
-ClientPlugin.$inject = ['eventBus', 'overlays', 'elementRegistry', 'editorActions'];
+PropertyInfoPlugin.$inject = ['eventBus', 'overlays', 'elementRegistry', 'editorActions'];
 
 module.exports = {
     __init__: ['clientPlugin'],
-    clientPlugin: ['type', ClientPlugin]
+    clientPlugin: ['type', PropertyInfoPlugin]
 };
 
 },{"lodash":4}],2:[function(require,module,exports){
 var registerBpmnJSPlugin = require('camunda-modeler-plugin-helpers').registerBpmnJSPlugin;
-var plugin = require('./ClientPlugin');
+var plugin = require('./PropertyInfoPlugin');
 
 registerBpmnJSPlugin(plugin);
 
-},{"./ClientPlugin":1,"camunda-modeler-plugin-helpers":3}],3:[function(require,module,exports){
+},{"./PropertyInfoPlugin":1,"camunda-modeler-plugin-helpers":3}],3:[function(require,module,exports){
 /**
  * Validate and register a client plugin.
  *
