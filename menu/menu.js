@@ -4,7 +4,7 @@ module.exports = function(electronApp, menuState) {
   return [
       {
           label: 'Toggle Overlay',
-          accelerator: 'CommandOrControl+Y',
+          accelerator: 'Alt+Y',
           enabled: function() {
               return menuState.bpmn;
           },
