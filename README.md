@@ -38,6 +38,8 @@ On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER
 ![E](./docs/badges/E.png) Extension<br/>
 ![F](./docs/badges/F.png) Field Injection
 
+![E](./docs/badges/Play.png) Is Executable<br/>
+![F](./docs/badges/Pause.png) Is not Executable
 ## Issues & ideas
 
 :bulb: Save toggle preferences in modeler<br/>
