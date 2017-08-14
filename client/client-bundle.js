@@ -37,7 +37,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
     function changeShape(event) {
         var element = event.element;
-        if (element.labelTarget || !element.businessObject.$instanceOf('bpmn:FlowNode')) {
+        if (!(element.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant'))) {
             return;
         }
         _.defer(function () {
@@ -69,7 +69,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var elementObject = elements[elementCount];
-                if (!elementObject.labelTarget && elementObject.businessObject.$instanceOf('bpmn:FlowNode')) {
+                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant')) {
                     addStyle(elementObject);
                 }
             }
@@ -84,7 +84,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             }
         }
 
-        if (element.businessObject.extensionElements === undefined) {
+        if (element.businessObject.extensionElements === undefined && element.businessObject.$instanceOf('bpmn:FlowNode')) {
             return;
         }
 
@@ -92,9 +92,30 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             return;
         }
 
-        var extensions = element.businessObject.extensionElements.values;
-
         var badges = [];
+
+        if(element.businessObject.$instanceOf('bpmn:Participant')) {
+            var extensionElements = element.businessObject.processRef.extensionElements;
+            var extensions = (extensionElements === undefined ? [] : extensionElements.values);
+
+            var type = '&#9654;';
+            var background = 'badge-green';
+            if(element.businessObject.processRef.isExecutable === false) {
+                type = '&#10074;&#10074;';
+                background = 'badge-red';
+            }
+            badges.push({
+                badgeKey: 'isExecutable',
+                badgeSort: 0,
+                badgeType: type,
+                badgeBackground: background,
+                badgeLocation: 'left'
+            });
+        }
+        else {
+            var extensions = element.businessObject.extensionElements.values;
+        }
+
 
         for (var extension in extensions) {
             var type = '';
