@@ -42,6 +42,13 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         }
         _.defer(function () {
             addStyle(element);
+            overlays.add(element, 'badge', {
+                position: {
+                    top: 4,
+                    right: 4
+                },
+                html: '</div><div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'
+            });
         });
     }
 
