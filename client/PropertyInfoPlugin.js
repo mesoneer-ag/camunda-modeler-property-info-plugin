@@ -68,7 +68,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var elementObject = elements[elementCount];
-                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant')) {
+                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || elementObject.businessObject.$instanceOf('bpmn:Participant')) {
                     addStyle(elementObject);
                 }
             }
