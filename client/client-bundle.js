@@ -69,7 +69,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var elementObject = elements[elementCount];
-                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant')) {
+                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || elementObject.businessObject.$instanceOf('bpmn:Participant')) {
                     addStyle(elementObject);
                 }
             }
@@ -84,7 +84,32 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             }
         }
 
+        elementOverlays[element.id] = [];
+
+        if( element.businessObject.documentation !== undefined &&
+            element.businessObject.documentation.length > 0 &&
+            element.businessObject.documentation[0].text.trim() !== ""){
+
+            var text = element.businessObject.documentation[0].text;
+            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+
+            elementOverlays[element.id].push(
+            overlays.add(element, 'badge', {
+                position: {
+                    top: 4,
+                    right: 4
+                },
+                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
+            }));
+        }
+
         if (element.businessObject.extensionElements === undefined && element.businessObject.$instanceOf('bpmn:FlowNode')) {
+            return;
+        }
+
+        //Do not process the label of an element
+        if (element.type === "label") {
             return;
         }
 
@@ -272,7 +297,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         }
 
-        elementOverlays[element.id] = badges;
+        pushArray(elementOverlays[element.id],badges);
     }
 
     function uniqBy(a, key) {
@@ -281,6 +306,15 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var k = key(item);
             return seen.hasOwnProperty(k) ? false : (seen[k] = true);
         })
+    }
+
+    function pushArray(list, other) {
+        var len = other.length;
+        var start = list.length;
+        list.length = start + len;
+        for (var i = 0; i < len; i++ , start++) {
+            list[start] = other[i];
+        }
     }
 
 }

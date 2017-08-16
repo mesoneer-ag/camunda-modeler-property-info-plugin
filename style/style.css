@@ -30,3 +30,43 @@
 .badge-red:after {
     background: #D2335C;
 }
+
+.doc-val-true {
+    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    border-radius: 0px 9px;
+    margin: -0.25em 0 0 -1.75em;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid transparent;
+    border-right: 12px solid #FFDE00;
+    border-top: 12px solid #FFDE00;
+}
+
+.doc-val-true::after {
+     content: "D";
+     color: #000;
+     background: none;
+     display: block;
+     margin: -11px 0 0 1px;
+     font-size: 10px;
+     position: absolute;
+ }
+
+.doc-val-true:hover + .doc-val-hover {
+    display: block;
+}
+
+.doc-val-hover {
+    display: none;
+    width: 200px;
+    height: 100px;
+    position: absolute;
+    margin: -11.5em 0 0 -13em;
+    border: 2px solid #D38C17;
+    border-radius: 10px;
+    box-shadow: 0px 1px 5px 0px #000;
+    background-color: #FFDE00;
+    padding: 5px 7px;
+    overflow: hidden;
+}
