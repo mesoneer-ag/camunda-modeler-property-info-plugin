@@ -87,7 +87,8 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         if( element.businessObject.documentation !== undefined &&
             element.businessObject.documentation.length > 0 &&
-            element.businessObject.documentation[0].text.trim() !== ""){
+            element.businessObject.documentation[0].text.trim() !== "" &&
+            element.type !== "label"){
 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
