@@ -85,24 +85,45 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         elementOverlays[element.id] = [];
 
-        if( element.businessObject.documentation !== undefined &&
+        if (element.businessObject.documentation !== undefined &&
             element.businessObject.documentation.length > 0 &&
             element.businessObject.documentation[0].text.trim() !== "" &&
-            element.type !== "label"){
+            element.type !== "label") {
 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 
             elementOverlays[element.id].push(
-            overlays.add(element, 'badge', {
-                position: {
-                    top: 4,
-                    right: 4
-                },
-                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
-            }));
+                overlays.add(element, 'badge', {
+                    position: {
+                        top: 4,
+                        right: 4
+                    },
+                    html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">' + text + '</div>'
+                })
+            );
         }
+
+        if (element.businessObject.id !== undefined &&
+            element.businessObject.id.length > 0 &&
+            element.type !== "label" ) {
+
+            var text = element.businessObject.id;
+            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+            elementOverlays[element.id].push(
+                overlays.add(element, 'badge', {
+                    position: {
+                        top: 4,
+                        left: 4
+                    },
+                    html: '<a href="#" title="Show ID" class="show-el-btn" data-badge="D">ID</a><div class="show-el-id" data-badge="D">' + text + '</div>'
+                })
+            );
+
+        }
+
 
         if (element.businessObject.extensionElements === undefined && element.businessObject.$instanceOf('bpmn:FlowNode')) {
             return;
@@ -119,13 +140,13 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         var badges = [];
 
-        if(element.businessObject.$instanceOf('bpmn:Participant')) {
+        if (element.businessObject.$instanceOf('bpmn:Participant')) {
             var extensionElements = element.businessObject.processRef.extensionElements;
             var extensions = (extensionElements === undefined ? [] : extensionElements.values);
 
             var type = '&#9654;';
             var background = 'badge-green';
-            if(element.businessObject.processRef.isExecutable === false) {
+            if (element.businessObject.processRef.isExecutable === false) {
                 type = '&#10074;&#10074;';
                 background = 'badge-red';
             }
@@ -297,7 +318,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         }
 
-        pushArray(elementOverlays[element.id],badges);
+        pushArray(elementOverlays[element.id], badges);
     }
 
     function uniqBy(a, key) {
