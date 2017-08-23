@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 var elementOverlays = [];
 var overlaysVisible = true;
+var overlaysIdVisible = true;
 
 function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
@@ -31,6 +32,9 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
     editorActions.register({
         togglePropertyOverlays: function () {
             toggleOverlays();
+        },
+        togglePropertyIdOverlays: function () {
+            toggleIdOverlays();
         }
     });
 
@@ -75,6 +79,51 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         }
     }
 
+    function toggleIdOverlays() {
+        if (overlaysIdVisible) {
+            overlaysIdVisible = false;
+            var elements = elementRegistry.getAll();
+            for (var elementCount in elements) {
+                var elementObject = elements[elementCount];
+                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || elementObject.businessObject.$instanceOf('bpmn:Participant')) {
+                    addElementIdStyle(elementObject);
+                }
+            }
+        } else {
+            overlaysIdVisible = true;
+            if (elementOverlays !== undefined) {
+                for (var elementCount in elementOverlays) {
+                    var elementObject = elementOverlays[elementCount];
+                    for (var overlay in elementObject) {
+                        overlays.remove(elementObject[overlay]);
+                    }
+                }
+            }
+        }
+    }
+
+    function addElementIdStyle(element) {
+
+        if (element.businessObject.id !== undefined &&
+            element.businessObject.id.length > 0 &&
+            element.type !== "label" ) {
+
+            var text = element.businessObject.id;
+            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+            elementOverlays[element.id].push(
+                overlays.add(element, 'badge', {
+                    position: {
+                        top: 4,
+                        left: 4
+                    },
+                    html: '<div class="show-el-id" data-badge="D">' + text + '</div>'
+                })
+            );
+
+        }
+    }
+
     function addStyle(element) {
 
         if (elementOverlays[element.id] !== undefined && elementOverlays[element.id].length !== 0) {
@@ -104,26 +153,6 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                 })
             );
         }
-
-        if (element.businessObject.id !== undefined &&
-            element.businessObject.id.length > 0 &&
-            element.type !== "label" ) {
-
-            var text = element.businessObject.id;
-            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
-
-            elementOverlays[element.id].push(
-                overlays.add(element, 'badge', {
-                    position: {
-                        top: 4,
-                        left: 4
-                    },
-                    html: '<a href="#" title="Show ID" class="show-el-btn" data-badge="D">ID</a><div class="show-el-id" data-badge="D">' + text + '</div>'
-                })
-            );
-
-        }
-
 
         if (element.businessObject.extensionElements === undefined && element.businessObject.$instanceOf('bpmn:FlowNode')) {
             return;
