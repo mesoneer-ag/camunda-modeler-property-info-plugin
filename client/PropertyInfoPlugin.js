@@ -74,6 +74,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                 var elementObject = elements[elementCount];
                 if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || elementObject.businessObject.$instanceOf('bpmn:Participant')) {
                     addStyle(elementObject);
+                    overlaysIdVisible = true;
                 }
             }
         }
@@ -96,6 +97,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     var elementObject = elementOverlays[elementCount];
                     for (var overlay in elementObject) {
                         overlays.remove(elementObject[overlay]);
+                        overlaysVisible = false;
                     }
                 }
             }
