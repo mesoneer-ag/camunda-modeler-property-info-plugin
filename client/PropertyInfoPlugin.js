@@ -1,6 +1,9 @@
 'use strict';
 
+var validUrl = require('valid-url');
 var _ = require('lodash');
+var $ = require('jquery');
+const shell = window.require('electron').shell;
 
 var elementOverlays = [];
 var overlaysVisible = true;
@@ -93,6 +96,16 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
+            var overlayHtml;
+            if (validUrl.isUri(text)) {
+              overlayHtml = $('<div class="doc-val-true" data-badge="D"></div>');
+
+              overlayHtml.click(function(e) {
+                shell.openExternal(text);
+              });
+            } else {
+              overlayHtml = '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>';
+            }
 
             elementOverlays[element.id].push(
             overlays.add(element, 'badge', {
@@ -100,7 +113,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     top: 4,
                     right: 4
                 },
-                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
+                html: overlayHtml
             }));
         }
 
