@@ -9,7 +9,15 @@ const shell = window.require('electron').shell;
 var elementOverlays = [];
 var overlaysVisible = true;
 
-function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
+function PropertyInfoPlugin(keyboard, eventBus, overlays, elementRegistry, editorActions) {
+    
+    keyboard.addListener(function (key, modifiers) {
+        if (key === 27 && $('div.doc-val-hover.showingPopup').length !== 0) {
+            var element = $('div.doc-val-hover.showingPopup');
+            element.removeClass('showingPopup');
+            element.hide();
+        }
+    });
 
     eventBus.on('shape.changed', function (event) {
         _.defer(function () {
@@ -105,7 +113,24 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                 shell.openExternal(text);
               });
             } else {
-              overlayHtml = '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>';
+                var overlayHtml = $('<div class="doc-val-true" data-badge="D"></div>');
+
+                overlayHtml.click(function (e) {
+                    var badge = $(this).siblings('.doc-val-hover');
+                    if (badge.length == 0) {
+                        $(this).after('<div class="doc-val-hover" data-badge="D">' + text + '</div>');
+                        badge = $(this).siblings('.doc-val-hover');
+                    }
+                    if ($(badge).is(":visible")) {
+                        $(badge).hide();
+                        $(badge).removeClass('showingPopup');
+                        keyboard.unbind();
+                    } else {
+                        $(badge).show();
+                        $(badge).addClass('showingPopup');
+                        keyboard.bind(document);
+                    }
+                });
             }
 
             elementOverlays[element.id].push(
@@ -333,7 +358,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
 }
 
-PropertyInfoPlugin.$inject = ['eventBus', 'overlays', 'elementRegistry', 'editorActions'];
+PropertyInfoPlugin.$inject = ['keyboard', 'eventBus', 'overlays', 'elementRegistry', 'editorActions'];
 
 module.exports = {
     __init__: ['clientPlugin'],
