@@ -1,11 +1,22 @@
 'use strict';
 
+var validUrl = require('valid-url');
 var _ = require('lodash');
+var $ = require('jquery');
+const shell = window.require('electron').shell;
 
 var elementOverlays = [];
 var overlaysVisible = true;
 
-function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
+function PropertyInfoPlugin(keyboard, eventBus, overlays, elementRegistry, editorActions) {
+    
+    keyboard.addListener(function (key, modifiers) {
+        if (key === 27 && $('div.doc-val-hover.showingPopup').length !== 0) {
+            var element = $('div.doc-val-hover.showingPopup');
+            element.removeClass('showingPopup');
+            element.hide();
+        }
+    });
 
     eventBus.on('shape.changed', function (event) {
         _.defer(function () {
@@ -93,6 +104,33 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
+            var overlayHtml;
+            if (validUrl.isUri(text)) {
+              overlayHtml = $('<div class="doc-val-true" data-badge="D"></div>');
+
+              overlayHtml.click(function(e) {
+                shell.openExternal(text);
+              });
+            } else {
+                var overlayHtml = $('<div class="doc-val-true" data-badge="D"></div>');
+
+                overlayHtml.click(function (e) {
+                    var badge = $(this).siblings('.doc-val-hover');
+                    if (badge.length == 0) {
+                        $(this).after('<div class="doc-val-hover" data-badge="D">' + text + '</div>');
+                        badge = $(this).siblings('.doc-val-hover');
+                    }
+                    if ($(badge).is(":visible")) {
+                        $(badge).hide();
+                        $(badge).removeClass('showingPopup');
+                        keyboard.unbind();
+                    } else {
+                        $(badge).show();
+                        $(badge).addClass('showingPopup');
+                        keyboard.bind(document);
+                    }
+                });
+            }
 
             elementOverlays[element.id].push(
             overlays.add(element, 'badge', {
@@ -100,7 +138,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     top: 4,
                     right: 4
                 },
-                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
+                html: overlayHtml
             }));
         }
 
@@ -319,7 +357,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
 }
 
-PropertyInfoPlugin.$inject = ['eventBus', 'overlays', 'elementRegistry', 'editorActions'];
+PropertyInfoPlugin.$inject = ['keyboard', 'eventBus', 'overlays', 'elementRegistry', 'editorActions'];
 
 module.exports = {
     __init__: ['clientPlugin'],

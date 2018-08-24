@@ -1,3 +1,25 @@
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
 .badge {
     position:relative;
 }
@@ -53,10 +75,6 @@
      position: absolute;
  }
 
-.doc-val-true:hover + .doc-val-hover {
-    display: block;
-}
-
 .doc-val-hover {
     display: none;
     width: 200px;
@@ -68,6 +86,6 @@
     box-shadow: 0px 1px 5px 0px #000;
     background-color: #FFDE00;
     padding: 5px 7px;
-    overflow: hidden;
+    overflow: auto;
     z-index: 9999;
 }
