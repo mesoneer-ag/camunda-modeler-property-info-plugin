@@ -119,7 +119,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     top: 4,
                     right: 4
                 },
-                html: '<div class="doc-val-true" data-badge="D"><div class="'+noteClass+'" data-badge="D">'+text+'</div>'
+                html: '<div class="doc-val-true" data-badge="D"></div><div class="'+noteClass+'" data-badge="D">'+text+'</div>'
             }));
         }
 
