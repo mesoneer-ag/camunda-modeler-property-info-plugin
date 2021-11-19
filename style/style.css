@@ -71,3 +71,7 @@
     overflow: hidden;
     z-index: 9999;
 }
+
+.doc-val-hover.doc-val-visible-note {
+    display: block;
+}

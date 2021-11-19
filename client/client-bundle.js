@@ -5,6 +5,7 @@ var _ = require('lodash');
 
 var elementOverlays = [];
 var overlaysVisible = true;
+var docNotesVisible = false;
 
 function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
@@ -32,6 +33,12 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
     editorActions.register({
         togglePropertyOverlays: function () {
             toggleOverlays();
+        }
+    });
+
+    editorActions.register({
+        togglePropertyDocNotes: function () {
+            toggleDocNotes();
         }
     });
 
@@ -76,6 +83,14 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         }
     }
 
+    function toggleDocNotes() {
+        if (overlaysVisible) {
+            docNotesVisible = !docNotesVisible;
+            overlaysVisible = false;
+            toggleOverlays();
+        }
+    }
+
     function addStyle(element) {
 
         if (elementOverlays[element.id] !== undefined && elementOverlays[element.id].length !== 0) {
@@ -94,14 +109,17 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
-
+            var noteClass = "doc-val-hover";
+            if (docNotesVisible) {
+                noteClass += " doc-val-visible-note";
+            }
             elementOverlays[element.id].push(
             overlays.add(element, 'badge', {
                 position: {
                     top: 4,
                     right: 4
                 },
-                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
+                html: '<div class="doc-val-true" data-badge="D"></div><div class="'+noteClass+'" data-badge="D">'+text+'</div>'
             }));
         }
 
