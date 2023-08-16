@@ -2,8 +2,23 @@
 
 var _ = require('lodash');
 
-var elementOverlays = [];
-var overlaysVisible = true;
+var mainElementOverlays = [];
+var elementIdOverlays = [];
+var elementTransactionOverlays = [];
+var mainOverlaysVisible = true;
+var transactionsVisible = false;
+var overlaysIdVisible = false;
+
+const docBadgeCoordsInfo = [
+    {type: 'BoundaryEvent', top: 3, right: 3},
+    {type: 'StartEvent', top: 2, right: 2},
+    {type: 'EndEvent', top: 1, right: 1},
+    {type: 'Gateway', top: 2, right: 4},
+    {type: 'Task', top: 4, right: 4},
+    {type: 'Activity', top: 5, right: 5},
+    {type: 'Participant', top: 3.5, right: 4},
+    {type: 'SequenceFlow'},
+];
 
 function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
 
@@ -27,105 +42,305 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         });
     });
 
+    eventBus.on('connection.changed', function (event) {
+        _.defer(function () {
+            changeShape(event);
+        });
+    });
+  
+    eventBus.on('connection.added', function (event) {
+        _.defer(function () {
+            changeShape(event);
+        });
+    });
 
     editorActions.register({
         togglePropertyOverlays: function () {
-            toggleOverlays();
+            toggleMainOverlay();
+        },
+        toggleTransactionOverlays: function () {
+            toggleTransactionOverlay();
+        },
+        toggleIdOverlays: function () {
+            toggleIdOverlay();
         }
     });
 
+    function isOverlayRequired(element) {
+        return element.businessObject.$instanceOf('bpmn:FlowNode') 
+                || element.businessObject.$instanceOf('bpmn:Participant') 
+                || element.businessObject.$instanceOf('bpmn:SequenceFlow');
+    }
+
     function changeShape(event) {
         var element = event.element;
-        if (!(element.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant'))) {
+        if (!isOverlayRequired(element)) {
             return;
         }
         _.defer(function () {
-            addStyle(element);
+            addMainElementsStyle(element);
+            addTransactionsStyle(element);
+            addIdsStyle(element);
         });
     }
 
     function removeShape(element) {
-        var elementObject = elementOverlays[element.id];
-        for (var overlay in elementObject) {
-            overlays.remove(elementObject[overlay]);
+        var elementObject = mainElementOverlays[element.id];
+        var transactionObject = elementTransactionOverlays[element.id];
+        var idsObject = elementIdOverlays[element.id];
+
+        for (
+                let t = 0, e = 0, i = 0; 
+                t < transactionObject.length || e < elementObject.length || i < idsObject.length; 
+                t++, e++, i++
+        ) {
+            overlays.remove(transactionObject[t]);
+            overlays.remove(elementObject[e]);
+            overlays.remove(idsObject[i]);
         }
-        delete elementOverlays[element.id];
+
+        delete mainElementOverlays[element.id];
+        delete elementTransactionOverlays[element.id];
+        delete elementIdOverlays[element.id];
     }
 
-    function toggleOverlays() {
-        if (overlaysVisible) {
-            overlaysVisible = false;
-            if (elementOverlays !== undefined) {
-                for (var elementCount in elementOverlays) {
-                    var elementObject = elementOverlays[elementCount];
+    function toggleMainOverlay() {
+        if (mainOverlaysVisible) {
+            mainOverlaysVisible = false;
+            if (mainElementOverlays !== undefined) {
+                for (var elementCount in mainElementOverlays) {
+                    var elementObject = mainElementOverlays[elementCount];
                     for (var overlay in elementObject) {
                         overlays.remove(elementObject[overlay]);
                     }
                 }
             }
         } else {
-            overlaysVisible = true;
+            mainOverlaysVisible = true;
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var elementObject = elements[elementCount];
-                if (elementObject.businessObject.$instanceOf('bpmn:FlowNode') || elementObject.businessObject.$instanceOf('bpmn:Participant')) {
-                    addStyle(elementObject);
+                if (isOverlayRequired(elementObject)) {
+                    addMainElementsStyle(elementObject);
                 }
             }
         }
     }
 
-    function addStyle(element) {
+    function calculateSequenceFlowBadgeCoords(element) {
+        const elementCount = mainElementOverlays[element.id].length + 1;
+        const x0 = element.waypoints[0].x, y0 = element.waypoints[0].y, x1 = element.waypoints[1].x, y1 = element.waypoints[1].y;
+        const ratio = 16 * elementCount / Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
+        const x = (1 - ratio) * x0 + ratio * x1, y = (1 - ratio) * y0 + ratio * y1;
 
-        if (elementOverlays[element.id] !== undefined && elementOverlays[element.id].length !== 0) {
-            for (var overlay in elementOverlays[element.id]) {
-                overlays.remove(elementOverlays[element.id][overlay]);
+        const xCoords = element.waypoints.map((coord) => coord.x);
+        const yCoords = element.waypoints.map((coord) => coord.y);
+
+        const maxCoordValue = {
+          x: Math.max.apply(null, xCoords),
+          y: Math.max.apply(null, yCoords),
+        };
+
+        return {
+          right: maxCoordValue.x - x,
+          bottom: maxCoordValue.y - y,
+        };
+    }
+
+    function toggleTransactionOverlay() {
+        if (transactionsVisible) {
+            transactionsVisible = false;
+            if (elementTransactionOverlays !== undefined) {
+                for (var elementCount in elementTransactionOverlays) {
+                    var overlaysArray = elementTransactionOverlays[elementCount];
+                    for (var elementObject in overlaysArray) {
+                        overlays.remove(overlaysArray[elementObject]);
+                    }
+                }
+            }
+        } else {
+            transactionsVisible = true;
+            var elements = elementRegistry.getAll();
+            for (var elementCount in elements) {
+                var element = elements[elementCount];
+                if (isOverlayRequired(element)) {
+                    addTransactionsStyle(element);
+                }
+            }
+        }
+    }
+
+    function toggleIdOverlay() {
+        if (overlaysIdVisible) {
+            overlaysIdVisible = false;
+            if (elementIdOverlays !== undefined) {
+                for (var elementCount in elementIdOverlays) {
+                    var overlaysArray = elementIdOverlays[elementCount];
+                    for (var elementObject in overlaysArray) {
+                        overlays.remove(overlaysArray[elementObject]);
+                    }
+                }
+            }
+        } else {
+            overlaysIdVisible = true;
+            var elements = elementRegistry.getAll();
+            for (var elementCount in elements) {
+                var element = elements[elementCount];
+                if (element.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant')) {
+                    addIdsStyle(element);
+                }
+            }
+        }
+    }
+
+    function addTransactionsStyle(element) {
+        if (elementTransactionOverlays[element.id] !== undefined && elementTransactionOverlays[element.id].length !== 0) {
+            for (var overlay in elementTransactionOverlays[element.id]) {
+                overlays.remove(elementTransactionOverlays[element.id][overlay]);
             }
         }
 
-        elementOverlays[element.id] = [];
+        elementTransactionOverlays[element.id] = [];
 
-        if( element.businessObject.documentation !== undefined &&
+        if (!transactionsVisible) {
+            return;
+        }
+
+        if (element.type !== "label") {
+            if (element.businessObject.$instanceOf('bpmn:Participant') 
+                && element.businessObject.processRef 
+                && element.businessObject.processRef.jobPriority !== undefined
+            ) {
+                const participantJobPriority = element.businessObject.processRef.jobPriority;
+                elementTransactionOverlays[element.id].push(
+                    overlays.add(element, 'badge', {
+                        position: {
+                            top: element.height / 2,
+                            left: 0
+                            },
+                        html: `<div class="show-tr">${participantJobPriority}</div>`
+                    })
+                );
+            }
+
+            const jobPriority = element.businessObject.jobPriority;
+            if (element.businessObject.asyncBefore) {
+                elementTransactionOverlays[element.id].push(
+                    overlays.add(element, 'badge', {
+                        position: {
+                            top: element.height / 2,
+                            left: 0
+                            },
+                        html: `<div class="show-tr">${jobPriority !== undefined ? jobPriority : ""}</div>`
+                    })
+                );
+            }
+    
+            if (element.businessObject.asyncAfter) {
+                elementTransactionOverlays[element.id].push(
+                    overlays.add(element, 'badge', {
+                        position: {
+                            top: element.height / 2,
+                            right: 0
+                        },
+                        html: `<div class="show-tr">${jobPriority !== undefined ? jobPriority : ""}</div>`
+                    })
+                );
+            }
+    
+        }
+    }
+
+    function addIdsStyle(element) {
+        if (elementIdOverlays[element.id] !== undefined && elementIdOverlays[element.id].length !== 0) {
+            for (var overlay in elementIdOverlays[element.id]) {
+                overlays.remove(elementIdOverlays[element.id][overlay]);
+            }
+        }
+
+        elementIdOverlays[element.id] = [];
+
+        if (!overlaysIdVisible) {
+            return;
+        }
+
+        if (element.businessObject.id !== undefined &&
+            element.businessObject.id.length > 0 &&
+            element.type !== "label" ) {
+
+            var text = element.businessObject.id;
+
+            elementIdOverlays[element.id].push(
+                overlays.add(element, 'badge', {
+                    position: {
+                        top: 4,
+                        left: 4
+                    },
+                    html: '<div class="show-el-id">' + text + '</div>'
+                })
+            );
+
+        }
+    }
+
+    function addMainElementsStyle(element) {
+
+        if (mainElementOverlays[element.id] !== undefined && mainElementOverlays[element.id].length !== 0) {
+            for (var overlay in mainElementOverlays[element.id]) {
+                overlays.remove(mainElementOverlays[element.id][overlay]);
+            }
+        }
+
+        mainElementOverlays[element.id] = [];
+
+        if (!mainOverlaysVisible) {
+            return;
+        }
+        
+        if (element.businessObject.documentation !== undefined &&
             element.businessObject.documentation.length > 0 &&
             element.businessObject.documentation[0].text.trim() !== "" &&
-            element.type !== "label"){
+            element.type !== "label") {
+
+            const isSequenceFlow = element.type === 'bpmn:SequenceFlow';
+            let sequenceFlowDocBadgeCoords;
+            if (isSequenceFlow) {
+                sequenceFlowDocBadgeCoords = calculateSequenceFlowBadgeCoords(element);
+            }
 
             var text = element.businessObject.documentation[0].text;
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
-
-            elementOverlays[element.id].push(
-            overlays.add(element, 'badge', {
-                position: {
-                    top: 4,
-                    right: 4
-                },
-                html: '<div class="doc-val-true" data-badge="D"></div><div class="doc-val-hover" data-badge="D">'+text+'</div>'
-            }));
+            docBadgeCoordsInfo.filter(info => element.type.includes(info.type)).forEach(info => {
+                mainElementOverlays[element.id].push(
+                    overlays.add(element, 'badge', {
+                        position: sequenceFlowDocBadgeCoords !== undefined
+                            ? { bottom: sequenceFlowDocBadgeCoords.bottom, right: sequenceFlowDocBadgeCoords.right } 
+                            : { top: info.top, right: info.right},
+                        html: `<div class="doc-val-true${isSequenceFlow ? '-rounded' : ''}"></div><div class="doc-val-hover">${text}</div>`
+                    }));
+            });
         }
 
-        if (element.businessObject.extensionElements === undefined && element.businessObject.$instanceOf('bpmn:FlowNode')) {
+        if (element.businessObject.extensionElements === undefined 
+                && (element.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:SequenceFlow'))
+            ) {
             return;
         }
 
-        //Do not process the label of an element
         if (element.type === "label") {
-            return;
-        }
-
-        if (!overlaysVisible) {
             return;
         }
 
         var badges = [];
 
-        if(element.businessObject.$instanceOf('bpmn:Participant')) {
+        if (element.businessObject.$instanceOf('bpmn:Participant') && element.businessObject.processRef) {
             var extensionElements = element.businessObject.processRef.extensionElements;
             var extensions = (extensionElements === undefined ? [] : extensionElements.values);
 
             var type = '&#9654;';
             var background = 'badge-green';
-            if(element.businessObject.processRef.isExecutable === false) {
+            if (element.businessObject.processRef.isExecutable === false) {
                 type = '&#10074;&#10074;';
                 background = 'badge-red';
             }
@@ -136,11 +351,9 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                 badgeBackground: background,
                 badgeLocation: 'left'
             });
-        }
-        else {
+        } else {
             var extensions = element.businessObject.extensionElements.values;
         }
-
 
         for (var extension in extensions) {
             var type = '';
@@ -155,6 +368,8 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                         location = 'left';
                         key = 'camunda:ExecutionListener-start';
                         sort = 20;
+                    } else if (extensions[extension].event === 'take') {
+                        key = 'camunda:ExecutionListener-take';
                     } else {
                         location = 'right';
                         key = 'camunda:ExecutionListener-end';
@@ -284,6 +499,15 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     html: '<div class="badge ' + overlayObject.badgeBackground + '" data-badge="' + overlayObject.badgeType + '"></div>'
                 }));
                 leftCounter = leftCounter + 16;
+            } else if (overlayObject.badgeKey === 'camunda:ExecutionListener-take') {
+                const badgeCoords = calculateSequenceFlowBadgeCoords(element);
+                badges.push(overlays.add(element, 'badge', {
+                    position: {
+                        bottom: badgeCoords.bottom,
+                        right: badgeCoords.right
+                    },
+                    html: '<div class="badge ' + overlayObject.badgeBackground + '" data-badge="' + overlayObject.badgeType + '"></div>'
+                }));
             } else {
                 badges.push(overlays.add(element, 'badge', {
                     position: {
@@ -297,7 +521,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
         }
 
-        pushArray(elementOverlays[element.id],badges);
+        pushArray(mainElementOverlays[element.id], badges);
     }
 
     function uniqBy(a, key) {
@@ -312,7 +536,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         var len = other.length;
         var start = list.length;
         list.length = start + len;
-        for (var i = 0; i < len; i++ , start++) {
+        for (var i = 0; i < len; i++, start++) {
             list[start] = other[i];
         }
     }

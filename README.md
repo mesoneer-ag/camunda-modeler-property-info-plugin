@@ -17,8 +17,10 @@
 <br>
 
 <div align="center">
-<img src="./plugin-example.png"
+<img src="./docs/plugin-example.png"
          alt="plugin example">
+<img src="./docs/plugin-example-2.png"
+         alt="plugin ids example">
 </div>
 
 ## How to install
@@ -37,6 +39,10 @@ On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER
 
 ![E](./docs/badges/E.png) Extension<br/>
 ![F](./docs/badges/F.png) Field Injection
+
+![ID](./docs/badges/id.png) Element id<br/>
+![D](./docs/badges/D.png) Documentation<br/>
+![TR](./docs/badges/tr.png) Transactions
 
 ![E](./docs/badges/Play.png) Is Executable<br/>
 ![F](./docs/badges/Pause.png) Is not Executable
