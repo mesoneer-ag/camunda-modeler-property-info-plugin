@@ -69,7 +69,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
 
     function isOverlayRequired(element) {
         return element.businessObject.$instanceOf('bpmn:FlowNode') 
-                || element.businessObject.$instanceOf('bpmn:Participant') 
+                || element.businessObject.$instanceOf('bpmn:Participant')
                 || element.businessObject.$instanceOf('bpmn:SequenceFlow');
     }
 
@@ -187,7 +187,9 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var element = elements[elementCount];
-                addIdsStyle(element);
+                if (isOverlayRequired(element)) {
+                    addIdsStyle(element);
+                }
             }
         }
     }
@@ -263,8 +265,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             return;
         }
 
-        if ((!element.businessObject.$instanceOf('bpmn:FlowNode') || !element.businessObject.$instanceOf('bpmn:Participant'))
-            && element.businessObject.$instanceOf('bpmn:SequenceFlow')) {
+        if (element.businessObject.$instanceOf('bpmn:SequenceFlow')) {
             return;
         }
 
