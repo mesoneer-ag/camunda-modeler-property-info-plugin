@@ -3,13 +3,6 @@
 
 var _ = require('lodash');
 
-var mainElementOverlays = [];
-var elementIdOverlays = [];
-var elementTransactionOverlays = [];
-var mainOverlaysVisible = true;
-var transactionsVisible = false;
-var overlaysIdVisible = false;
-
 const docBadgeCoordsInfo = [
     {type: 'BoundaryEvent', top: 3, right: 3},
     {type: 'StartEvent', top: 2, right: 2},
@@ -22,6 +15,13 @@ const docBadgeCoordsInfo = [
 ];
 
 function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) {
+
+    var mainElementOverlays = [];
+    var elementIdOverlays = [];
+    var elementTransactionOverlays = [];
+    var mainOverlaysVisible = true;
+    var transactionsVisible = false;
+    var overlaysIdVisible = false;
 
     eventBus.on('shape.changed', function (event) {
         _.defer(function () {
@@ -187,9 +187,7 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
             var elements = elementRegistry.getAll();
             for (var elementCount in elements) {
                 var element = elements[elementCount];
-                if (element.businessObject.$instanceOf('bpmn:FlowNode') || element.businessObject.$instanceOf('bpmn:Participant')) {
-                    addIdsStyle(element);
-                }
+                addIdsStyle(element);
             }
         }
     }
@@ -262,6 +260,11 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
         elementIdOverlays[element.id] = [];
 
         if (!overlaysIdVisible) {
+            return;
+        }
+
+        if ((!element.businessObject.$instanceOf('bpmn:FlowNode') || !element.businessObject.$instanceOf('bpmn:Participant'))
+            && element.businessObject.$instanceOf('bpmn:SequenceFlow')) {
             return;
         }
 
