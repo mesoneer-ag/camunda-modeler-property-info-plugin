@@ -95,9 +95,15 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                 t < transactionObject.length || e < elementObject.length || i < idsObject.length; 
                 t++, e++, i++
         ) {
-            overlays.remove(transactionObject[t]);
-            overlays.remove(elementObject[e]);
-            overlays.remove(idsObject[i]);
+            if (transactionObject[t] !== undefined) {
+                overlays.remove(transactionObject[t]);
+            }
+            if (elementObject[e] !== undefined) {
+                overlays.remove(elementObject[e]);
+            }
+            if (idsObject[i] !== undefined) {
+                overlays.remove(idsObject[i]);
+            }
         }
 
         delete mainElementOverlays[element.id];
