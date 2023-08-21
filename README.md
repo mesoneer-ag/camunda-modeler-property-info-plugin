@@ -11,7 +11,7 @@
          alt="version 1.8.2"></a>
   <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg"
          alt="license Apache 2.0"></a>
-  <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-mesoneer-yellow.svg?colorB=b060e2"
+  <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-mesoneer-purple.svg?colorB=7466ee"
          alt="connection people simplify"></a>
 </p>
 <br>
