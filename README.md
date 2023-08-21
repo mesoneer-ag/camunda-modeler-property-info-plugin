@@ -5,14 +5,14 @@
 <h4 align="center">This plugin serves a better overview which properties are set per shape.</h4>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/version-0.0.1-brightgreen.svg"
-         alt="version 0.0.1">
-  <a href="https://github.com/camunda/camunda-modeler"><img src="https://img.shields.io/badge/modeler-1.8.2-brightgreen.svg"
+    <img src="https://img.shields.io/badge/version-0.0.3-brightgreen.svg"
+         alt="version 0.0.3">
+  <a href="https://github.com/camunda/camunda-modeler"><img src="https://img.shields.io/badge/modeler version-4 and 5-brightgreen.svg"
          alt="version 1.8.2"></a>
   <a href="http://www.apache.org/licenses/"><img src="https://img.shields.io/badge/license-Apache_2.0-blue.svg"
          alt="license Apache 2.0"></a>
-  <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-UMB-yellow.svg?colorB=FED000"
-         alt="with love from umb"></a>
+  <a href="http://www.umb.ch"><img src="https://img.shields.io/badge/with_&#10084; from-mesoneer-yellow.svg?colorB=b060e2"
+         alt="connection people simplify"></a>
 </p>
 <br>
 
@@ -46,12 +46,6 @@ On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER
 
 ![E](./docs/badges/Play.png) Is Executable<br/>
 ![F](./docs/badges/Pause.png) Is not Executable
-## Issues & ideas
-
-:bulb: Save toggle preferences in modeler<br/>
-:bulb: Add implementation for cmmn<br/>
-:bulb: Show toggle state<br/>
-:bulb: Add implementation for sequence flows
 
 
 ## Licence
