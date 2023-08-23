@@ -28,6 +28,14 @@
 Adding a plugin is as easy as putting the directory into the directory `{MODELER_LOCATION}/plugins`.
 On macOS you have to create the `plugins` folder in this directoy: `/Users/{USER_NAME}/Library/Application Support/camunda-modeler`. A compressed version is always available in the release section.
 
+## How to use
+
+When in Modeler:
+
+Press **Alt + Y** to display Main Elements <br>
+Press **Alt + T** to display Transactions and Job Priorities <br>
+Press **Alt + X** to display Element IDs <br>
+
 ## Possible Badges
 
 ![I](./docs/badges/I.png) Input<br/>
