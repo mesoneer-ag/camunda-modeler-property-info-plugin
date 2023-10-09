@@ -17,7 +17,7 @@
 <br>
 
 ## About plugin
-__Camunda Modeler Property Info Plugin__ created by __mesoneer AG__ allows its users to have a batter overview over BPMN processes which may be helpful to get a better understanding of how processes are built and how elements interact. 
+__Camunda Modeler Property Info Plugin__ created by __mesoneer AG__ allows its users to have a batter overview over BPMN processes, which may be helpful to get a better understanding of how processes are built and how elements interact. 
 This Plugin is useful for processes of any size and complexity and may be helpful for developers and business specialists in order to better understand what is _'under the hood'_.
 
 <br>
