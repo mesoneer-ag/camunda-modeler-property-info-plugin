@@ -510,15 +510,17 @@ function PropertyInfoPlugin(eventBus, overlays, elementRegistry, editorActions) 
                     html: '<div class="badge ' + overlayObject.badgeBackground + '" data-badge="' + overlayObject.badgeType + '"></div>'
                 }));
                 leftCounter = leftCounter + 16;
-            } else if (overlayObject.badgeKey === 'camunda:ExecutionListener-take') {
-                const badgeCoords = calculateSequenceFlowBadgeCoords(element);
-                badges.push(overlays.add(element, 'badge', {
-                    position: {
-                        bottom: badgeCoords.bottom,
-                        right: badgeCoords.right
-                    },
-                    html: '<div class="badge ' + overlayObject.badgeBackground + '" data-badge="' + overlayObject.badgeType + '"></div>'
-                }));
+            } else if (element.type === 'bpmn:SequenceFlow') {
+                if (overlayObject.badgeKey === 'camunda:ExecutionListener-take') {
+                    const badgeCoords = calculateSequenceFlowBadgeCoords(element);
+                    badges.push(overlays.add(element, 'badge', {
+                        position: {
+                            bottom: badgeCoords.bottom,
+                            right: badgeCoords.right
+                        },
+                        html: '<div class="badge ' + overlayObject.badgeBackground + '" data-badge="' + overlayObject.badgeType + '"></div>'
+                    }));
+                }
             } else {
                 badges.push(overlays.add(element, 'badge', {
                     position: {
