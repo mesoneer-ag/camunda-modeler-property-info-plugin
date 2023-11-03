@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/umb/camunda-modeler-property-info-plugin#readme",
   "devDependencies": {
-    "browserify": "^14.1.0",
+    "browserify": "^17.0.0",
     "camunda-modeler-plugin-helpers": "^1.7.0",
     "watchify": "^3.9.0"
   },
