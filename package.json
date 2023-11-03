@@ -29,6 +29,6 @@
     "watchify": "^3.9.0"
   },
   "dependencies": {
-    "lodash": "^3.0.0"
+    "lodash": "^4.17.20"
   }
 }
